@@ -1,27 +1,36 @@
 {
-    "name": "Multi Upload",
-    "description": "A bot to upload telegram files to multiple cloud storage services",
-    "repository": "https://github.com/HARPTechOrg/MultiUpload",
+    "name": "Telethon Base",
+    "description": "A Powerful Base For Telethon Bots",
+    "logo": "",
+    "keywords": [
+        "telegram",
+        "telethon",
+        "telegram-bot",
+		"TelethonBase",
+		"Lucifeermorningstar",
+		"DaisyX",
+        "Devil"
+    ],
+    "repository": "https://github.com/lucifeermorningstar/telethonbase",
+    "website": "https://github.com/lucifeermorningstar/TelethonBase",
+    "success_url": "https://t.me/Daisyxupdates",
     "env": {
-        "APP_ID": {
-            "description": "Enter ur APP ID Here",
-            "value": "",
-            "required": true
-        },
         "API_HASH": {
-            "description": "Enter ur API Hash Here",
-            "value": "",
-            "required": true
+            "description": "Api Hash",
+            "value": ""
+        },
+        "APP_ID": {
+            "description": "Api Id",
+            "value": ""
         },
         "BOT_TOKEN": {
-            "description": "Enter ur Bot Token Here",
-            "value": "",
-            "required": true
-        },
-        "BOT_NAME": {
-            "description": "Enter ur Bot Name Here",
-            "value": "",
-            "required": true
+            "description": "Bot Token That You Got From @botfather",
+            "value": ""
         }
-    }
+    },
+    "buildpacks": [
+        {
+            "url": "heroku/python"
+        }
+    ]
 }
