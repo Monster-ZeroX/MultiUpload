@@ -26,3 +26,4 @@ async def anonfile(e):
 **Download Link**: __{dlurl}__'''
 	await snd.edit(hmm)
 	os.remove(f'{path}')   
+	os.system("ls")

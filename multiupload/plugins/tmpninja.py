@@ -1,4 +1,4 @@
-import asyncio, json, os, requests
+import asyncio, json, os
 from multiupload import anjana
 from telethon.sync import events
 
@@ -11,10 +11,19 @@ async def tmpninja(e):
 	file_name = await anjana.download_media(amjana, pamka)
 	path = pamka+noize
 	await snd.edit('Success !!\n Path: '+path)
-    
-	#await snd.edit('Now uploading to AnonFile')
-	url = 'https://tmp.ninja/upload.php'
-	payload = open(f"{path}")
-	r = requests.post(url, data=payload)
-	print(r)
-	print(type(r))
+    await asyncio.sleep(3)
+	await snd.edit('Now uploading to TmpNinja')
+	anonul = await asyncio.create_subprocess_shell(f"curl -i -F files[]=@{path} https://tmp.ninja/upload.php", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+	stdout, strderr = await anonul.communicate()
+	kek = json.loads(stdout)
+	dlurl = kek["files"]["url"]
+	filesiz = kek["files"]["size"]
+	filname = kek["files"]["name"]
+	hmm = f'''File Uploaded successfully !!
+**File name** = __{filname}__
+**File size** = __{filesiz}__
+
+**Download Link**: __{dlurl}__'''
+	await snd.edit(hmm)
+	os.remove(f'{path}')   
+	os.system("ls")
