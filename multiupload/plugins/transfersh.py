@@ -2,8 +2,8 @@ import asyncio, json, os
 from multiupload import anjana
 from telethon.sync import events
 
-@anjana.on(events.NewMessage(pattern='/tmpninja'))
-async def tmpninja(e):
+@anjana.on(events.NewMessage(pattern='/tsh'))
+async def tsh(e):
 	amjana = await e.get_reply_message()
 	pamka = "./downloads/"
 	noize = amjana.file.name
@@ -13,21 +13,19 @@ async def tmpninja(e):
 	await snd.edit('Success !!\n Path: '+path)
 	await asyncio.sleep(3)
 
-	await snd.edit('Now uploading to TmpNinja')
+	await snd.edit('Now uploading to Transfer.SH')
 	try:
-		anonul = await asyncio.create_subprocess_shell(f"curl -i -F files[]=@{path} https://tmp.ninja/upload.php", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+		anonul = await asyncio.create_subprocess_shell(f"curl --upload-file {path} https://transfer.sh/{noize}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 		stdout, strderr = await anonul.communicate()
-		kek = json.loads(stdout)
 	except Exception as err:
 		return await snd.edit(f"`ERR: {err}`")
-	dlurl = kek["files"]["url"]
-	filesiz = kek["files"]["size"]
-	filname = kek["files"]["name"]
+
+	filesiz = os.path.getsize(path)
 	hmm = f'''File Uploaded successfully !!
-**File name** = __{filname}__
+**File name** = __{noize}__
 **File size** = __{filesiz}__
 
-**Download Link**: __{dlurl}__'''
+**Download Link**: __{stdout}__'''
 	await snd.edit(hmm)
 	os.remove(f'{path}')   
 	os.system("ls")
