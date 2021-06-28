@@ -11,7 +11,7 @@ async def tmpninja(e):
 	file_name = await anjana.download_media(amjana, pamka)
 	path = pamka+noize
 	await snd.edit('Success !!\n Path: '+path)
-    await asyncio.sleep(3)
+	await asyncio.sleep(3)
 	await snd.edit('Now uploading to TmpNinja')
 	anonul = await asyncio.create_subprocess_shell(f"curl -i -F files[]=@{path} https://tmp.ninja/upload.php", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 	stdout, strderr = await anonul.communicate()
