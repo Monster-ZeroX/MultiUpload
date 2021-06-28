@@ -21,7 +21,7 @@ def load_plugins(plugin_name):
     load.logger = logging.getLogger(plugin_name)
     spec.loader.exec_module(load)
     sys.modules["multiupload.plugins." + plugin_name] = load
-    print(plugin_name + " imported")
+    print("IMPORTED --> " + plugin_name)
 
 
 path = "multiupload/plugins/*.py"
@@ -32,7 +32,6 @@ for name in files:
         plugin_name = thepath.stem
         load_plugins(plugin_name.replace(".py", ""))
 
-print("Successfully deployed!")
 print("Bot Started Successfully ")
 
 
