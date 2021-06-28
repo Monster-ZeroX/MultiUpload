@@ -1,5 +1,3 @@
 telethon
 requests
 asyncio
-libcurl4-openssl-dev
-libssl-dev
