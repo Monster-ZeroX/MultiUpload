@@ -8,7 +8,7 @@ async def anonfile(e):
 	pamka = "./downloads/"
 	noize = amjana.file.name
 	snd = await anjana.send_message(e.chat_id, 'Start Downloading')
-	file_name = await ultroid_bot.download_media(amjana, pamka)
+	file_name = await anjana.download_media(amjana, pamka)
 	path = pamka+noize
 	await snd.edit('Success !!\n Path: '+path)
     
