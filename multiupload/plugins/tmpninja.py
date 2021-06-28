@@ -17,13 +17,13 @@ async def tmpninja(e):
 	await snd.edit('Success !!\n Path: '+path)
     
 	#await snd.edit('Now uploading to AnonFile')
-  cURL = f"""curl -i -F files[]=@{path} https://tmp.ninja/upload.php"""
+	cURL = f"""curl -i -F files[]=@{path} https://tmp.ninja/upload.php"""
 
-  lCmd = shlex.split(cURL) # Splits cURL into an array
+	lCmd = shlex.split(cURL) # Splits cURL into an array
 
-  p = subprocess.Popen(lCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  out, err = p.communicate() # Get the output and the err message
+	p = subprocess.Popen(lCmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	out, err = p.communicate() # Get the output and the err message
 
-  json_data = json.loads(out.decode("utf-8"))
+	json_data = json.loads(out.decode("utf-8"))
 
-  print(json_data) # Display now the data
+	print(json_data) # Display now the data
