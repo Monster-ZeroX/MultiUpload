@@ -11,11 +11,16 @@ async def anonfile(e):
 	file_name = await anjana.download_media(amjana, pamka)
 	path = pamka+noize
 	await snd.edit('Success !!\n Path: '+path)
-    
+	await asyncio.sleep(3)
+
 	await snd.edit('Now uploading to AnonFile')
-	anonul = await asyncio.create_subprocess_shell("curl -F 'file=@"+path+"' https://api.anonfiles.com/upload", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-	stdout, strderr = await anonul.communicate()
-	kek = json.loads(stdout)
+	try:
+		anonul = await asyncio.create_subprocess_shell("curl -F 'file=@"+path+"' https://api.anonfiles.com/upload", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+		stdout, strderr = await anonul.communicate()
+		kek = json.loads(stdout)
+	except Exception as err:
+		return await snd.edit(f"`ERR: {err}`")
+
 	dlurl = kek["data"]["file"]["url"]["full"]
 	filesiz = kek["data"]["file"]["metadata"]["size"]["readable"]
 	filname = kek["data"]["file"]["metadata"]["name"]

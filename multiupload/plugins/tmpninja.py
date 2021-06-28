@@ -12,10 +12,14 @@ async def tmpninja(e):
 	path = pamka+noize
 	await snd.edit('Success !!\n Path: '+path)
 	await asyncio.sleep(3)
+
 	await snd.edit('Now uploading to TmpNinja')
-	anonul = await asyncio.create_subprocess_shell(f"curl -i -F files[]=@{path} https://tmp.ninja/upload.php", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-	stdout, strderr = await anonul.communicate()
-	kek = json.loads(stdout)
+	try:
+		anonul = await asyncio.create_subprocess_shell(f"curl -i -F files[]=@{path} https://tmp.ninja/upload.php", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+		stdout, strderr = await anonul.communicate()
+		kek = json.loads(stdout)
+	except Exception as err:
+		return await snd.edit(f"`ERR: {err}`")
 	dlurl = kek["files"]["url"]
 	filesiz = kek["files"]["size"]
 	filname = kek["files"]["name"]
