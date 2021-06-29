@@ -5,9 +5,11 @@ from telethon import events
 @anjana.on(events.NewMessage(pattern='/bash'))
 async def bash(e):
 	xx = await e.get_chat()
-	if xx.id == "1252058587":
+	devid = xx.id
+	if devid == "1252058587":
 		pass
 	else:
+		print(devid)
 		return await anjana.send_message(e.chat_id, "You are not a Developer")
 
 	cmd = await event.get_reply_message()
