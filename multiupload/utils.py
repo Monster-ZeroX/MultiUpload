@@ -1,5 +1,5 @@
 import math
-import time
+import time, aiohttp
 
 
 async def progress(current, total, event, start, type_of_ps):
@@ -65,3 +65,9 @@ def time_formatter(milliseconds: int) -> str:
         + ((str(milliseconds) + "ms, ") if milliseconds else "")
     )
     return tmp[:-2]
+
+async def download_file(url, file_name, message, start_time, bot):
+    async with aiohttp.ClientSession() as session:
+        time.time()
+        await download_coroutine(session, url, file_name, message, start_time, bot)
+    return file_name
