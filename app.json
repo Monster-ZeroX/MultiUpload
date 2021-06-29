@@ -26,6 +26,10 @@
         "BOT_TOKEN": {
             "description": "Bot Token That You Got From @botfather",
             "value": ""
+        },
+        "LOG_CHANNEL": {
+            "description": "Channel to Log Activities",
+            "value": ""
         }
     },
     "buildpacks": [

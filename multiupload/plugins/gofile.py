@@ -5,8 +5,8 @@ from datetime import datetime
 import time
 from multiupload.utils import humanbytes, progress, time_formatter, download_file
 
-@anjana.on(events.NewMessage(pattern='/anonfile'))
-async def anonfile(e):
+@anjana.on(events.NewMessage(pattern='/gofile'))
+async def gofile(e):
 	if e.reply_to_msg_id:
 		pass
 	else:
@@ -32,22 +32,31 @@ async def anonfile(e):
 	await snd.edit('Success !!\n Path: '+file_path)
 	await asyncio.sleep(3)
 
-	await snd.edit('Now uploading to AnonFile')
-
-
+	await snd.edit('Getting Server...')
+	await asyncio.sleep(1)
 	try:
-		anonul = await asyncio.create_subprocess_shell("curl -F 'file=@"+file_path+"' https://api.anonfiles.com/upload", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+		anonul = await asyncio.create_subprocess_shell("curl https://api.gofile.io/getServer", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+		stdout, strderr = await anonul.communicate()
+		srfl = json.loads(stdout)
+	except Exception as err:
+		return await snd.edit(f"`ERR: {err}`")
+	servr = srfl["data"]["server"]
+
+
+	await snd.edit('Uploading to GoFile')
+	try:
+		anonul = await asyncio.create_subprocess_shell(f"curl -F file=@{file_path} https://{servr}.gofile.io/uploadFile", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 		stdout, strderr = await anonul.communicate()
 		kek = json.loads(stdout)
 	except Exception as err:
 		return await snd.edit(f"`ERR: {err}`")
 
 
-	dlurl = kek["data"]["file"]["url"]["full"]
-	filesiz = kek["data"]["file"]["metadata"]["size"]["readable"]
-	filname = kek["data"]["file"]["metadata"]["name"]
+	dlurl = kek["data"]["downloadPage"]
+	filesiz = humanbytes(os.path.getsize(file_path))
+	filname = kek["data"]["fileName"]
 	hmm = f'''File Uploaded successfully !!
-Server: AnonFile
+Server: GoFile
 
 **~ File name** = __{filname}__
 **~ File size** = __{filesiz}__
@@ -59,7 +68,7 @@ Server: AnonFile
 	## LOGGING TO A CHANNEL
     xx = await e.get_chat()
     reqmsg = f'''Req User: [{xx.first_name}](tg://user?id={xx.id})
-FileName: {url.file.name}
-FileSize: {kl}
-#ANONFILE'''
+FileName: {filname}
+FileSize: {filesiz}
+#GOFILE'''
     await anjana.send_message(LOG_CHANNEL, reqmsg)

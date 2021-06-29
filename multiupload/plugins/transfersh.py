@@ -7,6 +7,7 @@ import aiohttp
 from telethon import events
 
 from multiupload.utils import humanbytes, progress, download_file
+from config import LOG_CHANNEL
 
 async def send_to_transfersh_async(file):
 
@@ -28,33 +29,48 @@ async def send_to_transfersh_async(file):
 @anjana.on(events.NewMessage(pattern="/transfersh"))
 async def tsh(event):
     if event.reply_to_msg_id:
+        pass
+    else:
+        return await anjana.send_message(event.chat_id, "Please Reply to File")
 
-        start = time.time()
-        url = await event.get_reply_message()
-        snd = await anjana.send_message(event.chat_id, "Starting Download...")
-        d = "./downloads"
-        try:
-            file_path = await url.download_media(
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, snd, start, "Downloading...")
-                )
+    start = time.time()
+    url = await event.get_reply_message()
+    snd = await anjana.send_message(event.chat_id, "Starting Download...")
+    d = "./downloads"
+    try:
+        file_path = await url.download_media(
+            progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                progress(d, t, snd, start, "Downloading...")
             )
-        except Exception as e:
-            await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
+        )
+    except Exception as e:
+        await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
 
-        try:
-            await snd.edit("Uploading to TransferSh...")
-            download_link, size = await send_to_transfersh_async(file_path)
+    try:
+        await snd.edit("Uploading to TransferSh...")
+        download_link, size = await send_to_transfersh_async(file_path)
 
-            str(time.time() - start)
-            kl = humanbytes(os.path.getsize(file_path))
-            hmm = f'''File Uploaded successfully !!
-**File name** = __{url.file.name}__
-**File size** = __{kl}__
+        str(time.time() - start)
+        kl = humanbytes(os.path.getsize(file_path))
+        hmm = f'''File Uploaded successfully !!
+Server: TransferSH
 
-**Download Link**: __{download_link}__'''
-            await snd.edit(hmm)
-        except Exception as e:
-            await snd.edit(f"Uploading Failed\n\n**Error:** {e}")
+**~ File name** = __{url.file.name}__
+**~ File size** = __{kl}__
+**~ Download Link**: __{download_link}__'''
+        await snd.edit(hmm)
+    except Exception as e:
+        await snd.edit(f"Uploading Failed\n\n**Error:** {e}")
+
+    os.remove('downloads/'+file_path)
 
     raise events.StopPropagation
+
+    ## LOGGING TO A CHANNEL
+    xx = await e.get_chat()
+    reqmsg = f'''Req User: [{xx.first_name}](tg://user?id={xx.id})
+FileName: {url.file.name}
+FileSize: {kl}
+#TRANSFERSH'''
+    await anjana.send_message(LOG_CHANNEL, reqmsg)
+
