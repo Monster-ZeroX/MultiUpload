@@ -47,8 +47,7 @@ async def tsh(event):
             download_link, size = await send_to_transfersh_async(file_path)
 
             str(time.time() - start)
-            kk = os.path.getsize(url)
-            kl = humanbytes(kk)
+            kl = humanbytes(os.path.getsize(file_path))
             hmm = f'''File Uploaded successfully !!
 **File name** = __{url.file.name}__
 **File size** = __{kl}__
