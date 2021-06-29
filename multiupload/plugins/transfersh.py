@@ -1,31 +1,58 @@
-import asyncio, json, os
 from multiupload import anjana
-from telethon.sync import events
+import asyncio
+import datetime
+import os
+import time
+import aiohttp
+from telethon import events
 
-@anjana.on(events.NewMessage(pattern='/tsh'))
-async def tsh(e):
-	amjana = await e.get_reply_message()
-	pamka = "./downloads/"
-	noize = amjana.file.name
-	snd = await anjana.send_message(e.chat_id, 'Start Downloading')
-	file_name = await anjana.download_media(amjana, pamka)
-	path = pamka+noize
-	await snd.edit('Success !!\n Path: '+path)
-	await asyncio.sleep(3)
+from multiupload.utils import humanbytes, progress, download_file
 
-	await snd.edit('Now uploading to Transfer.SH')
-	try:
-		anonul = await asyncio.create_subprocess_shell(f"curl --upload-file {path} https://transfer.sh/{noize}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-		stdout, strderr = await anonul.communicate()
-	except Exception as err:
-		return await snd.edit(f"`ERR: {err}`")
+async def send_to_transfersh_async(file):
 
-	filesiz = os.path.getsize(path)
-	hmm = f'''File Uploaded successfully !!
-**File name** = __{noize}__
-**File size** = __{filesiz}__
+    size = os.path.getsize(file)
+    size_of_file = humanbytes(size)
+    file_name = os.path.basename(file)
 
-**Download Link**: __{stdout}__'''
-	await snd.edit(hmm)
-	os.remove(f'{path}')   
-	os.system("cd downloads && ls")
+    print("\nUploading file: {} (size of the file: {})".format(file_name, size_of_file))
+    url = "https://transfer.sh/"
+
+    with open(file, "rb") as f:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, data={str(file): f}) as response:
+                download_link = await response.text()
+
+    return download_link, size_of_file
+
+
+@anjana.on(events.NewMessage(pattern="/transfersh"))
+async def tsh(event):
+    if event.reply_to_msg_id:
+
+        start = time.time()
+        url = await event.get_reply_message()
+        snd = await anjana.send_message(event.chat_id, "Starting Download...")
+        try:
+            file_path = await url.download_media(
+                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
+                    progress(downloads, t, snd, start, "Downloading...")
+                )
+            )
+        except Exception as e:
+            await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
+
+        try:
+            await snd.edit("Uploading to TransferSh...")
+            download_link, size = await send_to_transfersh_async(file_path)
+
+            str(time.time() - start)
+            hmm = f'''File Uploaded successfully !!
+**File name** = __{file_name}__
+**File size** = __{size_of_file}__
+
+**Download Link**: __{download_link}__'''
+            await snd.edit(hmm)
+        except Exception as e:
+            await snd.edit(f"Uploading Failed\n\n**Error:** {e}")
+
+    raise events.StopPropagation

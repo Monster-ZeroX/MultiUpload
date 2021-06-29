@@ -7,6 +7,11 @@ from multiupload.utils import humanbytes, progress, time_formatter, download_fil
 
 @anjana.on(events.NewMessage(pattern='/anonfile'))
 async def anonfile(e):
+	if e.reply_to_msg_id:
+		pass
+	else:
+		await anjana.send_message(e.chat_id, "Please Reply to File")
+		
 	amjana = await e.get_reply_message()
 	pamka = "./downloads/"
 	noize = amjana.file.name
