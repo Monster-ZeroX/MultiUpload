@@ -13,7 +13,7 @@ async def anonfile(e):
 	k = time.time()
 	snd = await anjana.send_message(e.chat_id, 'Start Downloading')
 
-	file_name = await event.client.download_media(
+	file_name = await e.client.download_media(
                 amjana,
                 pamka,
                 progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
