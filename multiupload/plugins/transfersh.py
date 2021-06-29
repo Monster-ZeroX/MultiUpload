@@ -48,7 +48,7 @@ async def tsh(event):
 
             str(time.time() - start)
             hmm = f'''File Uploaded successfully !!
-**File name** = __{file_name}__
+**File name** = __{url.file.name}__
 **File size** = __{size_of_file}__
 
 **Download Link**: __{download_link}__'''
