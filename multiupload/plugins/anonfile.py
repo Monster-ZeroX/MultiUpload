@@ -14,26 +14,30 @@ async def anonfile(e):
 	k = time.time()
 	snd = await anjana.send_message(e.chat_id, 'Start Downloading')
 
+
 	try:
 		file_path = await amjana.download_media(
 			progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
-				progress(pamka, t, snd, k, "Downloading...")
+				progress(pamka, snd, k, "Downloading...")
 			)
 		)
 	except Exception as e:
 		await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
-	t = time_formatter(((e - s).seconds) * 1000)
+
 
 	await snd.edit('Success !!\n Path: '+file_path)
 	await asyncio.sleep(3)
 
 	await snd.edit('Now uploading to AnonFile')
+
+
 	try:
 		anonul = await asyncio.create_subprocess_shell("curl -F 'file=@"+file_path+"' https://api.anonfiles.com/upload", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 		stdout, strderr = await anonul.communicate()
 		kek = json.loads(stdout)
 	except Exception as err:
 		return await snd.edit(f"`ERR: {err}`")
+
 
 	dlurl = kek["data"]["file"]["url"]["full"]
 	filesiz = kek["data"]["file"]["metadata"]["size"]["readable"]
@@ -43,6 +47,8 @@ async def anonfile(e):
 **File size** = __{filesiz}__
 
 **Download Link**: __{dlurl}__'''
+
+
 	await snd.edit(hmm)
 	os.remove(f'{path}')   
 	os.system("cd downloads && ls")
