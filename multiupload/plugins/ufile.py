@@ -6,8 +6,8 @@ import time
 from multiupload.utils import humanbytes, progress, time_formatter, download_file
 from config import LOG_CHANNEL
 
-@anjana.on(events.NewMessage(pattern='/anonfile'))
-async def anonfile(e):
+@anjana.on(events.NewMessage(pattern='/ufile'))
+async def ufile(e):
 	if e.reply_to_msg_id:
 		pass
 	else:
