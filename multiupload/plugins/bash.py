@@ -21,10 +21,12 @@ async def bash(event):
     )
     stdout, stderr = await process.communicate()
     result = str(stdout.decode().strip()) + str(stderr.decode().strip())
+
+    print(result)
     curruser = "AnjanaMa"
     uid = os.geteuid()
     if uid == 0:
-        cresult = f"`{curruser}:~#` `{cmd}`\n`{result}`"
+        cresult = f"<b>{curruser}:~# {cmd}</b>\n{result}"
     else:
-        cresult = f"`{curruser}:~$` `{cmd}`\n`{result}`"
+        cresult = f"<b>{curruser}:~$ {cmd}</b>\n{result}"
     await catevent.edit(cresult)
