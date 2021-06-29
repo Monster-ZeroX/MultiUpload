@@ -21,8 +21,6 @@ async def bash(event):
     )
     stdout, stderr = await process.communicate()
     result = str(stdout.decode().strip()) + str(stderr.decode().strip())
-
-    print(result)
     curruser = "AnjanaMa"
     uid = os.geteuid()
     if uid == 0:
