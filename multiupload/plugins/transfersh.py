@@ -69,5 +69,6 @@ FileName: {url.file.name}
 FileSize: {kl}
 #TRANSFERSH'''
     await anjana.send_message(LOG_CHANNEL, reqmsg)
+    os.remove(file_path)
 
     raise events.StopPropagation

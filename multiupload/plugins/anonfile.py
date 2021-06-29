@@ -62,3 +62,4 @@ FileName: {filname}
 FileSize: {filesiz}
 #ANONFILE'''
 	await anjana.send_message(LOG_CHANNEL, reqmsg)
+	os.remove(file_path)
