@@ -49,5 +49,5 @@ async def anonfile(e):
 
 
 	await snd.edit(hmm)
-	os.remove(f'{path}')   
+	os.remove(f'{file_path}')   
 	os.system("cd downloads && ls")
