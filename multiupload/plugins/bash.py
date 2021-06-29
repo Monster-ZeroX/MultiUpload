@@ -14,7 +14,7 @@ async def bash(event):
     else:
         return await anjana.send_message(event.chat_id, "You are not a Developer")
 
-    cmd = await event.get_reply_message()
+    cmd = "".join(event.message.message.split(maxsplit=1)[1:])
     catevent = await anjana.send_message(event.chat_id, "Executing.....")
     process = await asyncio.create_subprocess_shell(
         cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
