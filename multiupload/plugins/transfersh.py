@@ -28,4 +28,4 @@ async def tsh(e):
 **Download Link**: __{stdout}__'''
 	await snd.edit(hmm)
 	os.remove(f'{path}')   
-	os.system("ls")
+	os.system("cd downloads && ls")
