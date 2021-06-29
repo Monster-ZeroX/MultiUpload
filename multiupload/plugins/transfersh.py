@@ -62,8 +62,6 @@ Server: TransferSH
     except Exception as e:
         await snd.edit(f"Uploading Failed\n\n<b>Error:</b> {e}")
 
-    raise events.StopPropagation
-
     ## LOGGING TO A CHANNEL
     xx = await e.get_chat()
     reqmsg = f'''Req User: <a href="tg://user?id={xx.id}">{xx.first_name}</a>
@@ -71,4 +69,5 @@ FileName: {url.file.name}
 FileSize: {kl}
 #TRANSFERSH'''
     await anjana.send_message(LOG_CHANNEL, reqmsg)
-    os.remove('./downloads/'+file_path)
+
+    raise events.StopPropagation

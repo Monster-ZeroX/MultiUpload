@@ -58,8 +58,7 @@ Server: AnonFile
 	## LOGGING TO A CHANNEL
 	xx = await e.get_chat()
 	reqmsg = f'''Req User: <a href="tg://user?id={xx.id}">{xx.first_name}</a>
-FileName: {url.file.name}
-FileSize: {kl}
+FileName: {filname}
+FileSize: {filesiz}
 #ANONFILE'''
 	await anjana.send_message(LOG_CHANNEL, reqmsg)
-	os.remove('./downloads/'+file_path)
