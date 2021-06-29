@@ -32,10 +32,11 @@ async def tsh(event):
         start = time.time()
         url = await event.get_reply_message()
         snd = await anjana.send_message(event.chat_id, "Starting Download...")
+        d = "./downloads"
         try:
             file_path = await url.download_media(
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(downloads, t, snd, start, "Downloading...")
+                    progress(d, t, snd, start, "Downloading...")
                 )
             )
         except Exception as e:

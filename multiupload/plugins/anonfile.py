@@ -10,8 +10,8 @@ async def anonfile(e):
 	if e.reply_to_msg_id:
 		pass
 	else:
-		await anjana.send_message(e.chat_id, "Please Reply to File")
-		
+		return await anjana.send_message(e.chat_id, "Please Reply to File")
+
 	amjana = await e.get_reply_message()
 	pamka = "./downloads/"
 	noize = amjana.file.name
@@ -54,5 +54,4 @@ async def anonfile(e):
 
 
 	await snd.edit(hmm)
-	os.remove(f'{file_path}')   
-	os.system("cd downloads && ls")
+	os.remove(f'{file_path}')
