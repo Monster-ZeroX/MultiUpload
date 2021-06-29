@@ -1,4 +1,4 @@
-import os
+import os, asyncio
 from multiupload import anjana
 from telethon import events
 
@@ -12,7 +12,8 @@ async def bash(e):
 		return await anjana.send_message(e.chat_id, "You are not a Developer")
 
 	cmd = await e.get_reply_message()
+	snd = await anjana.send_message(e.chat_id, "Excuting...")
 	shell = await asyncio.create_subprocess_shell(f"{cmd}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 	stdout, strderr = await shell.communicate()
 
-	await anjana.send_message(e.chat_id, stdout)
+	await snd.edit(stdout)
