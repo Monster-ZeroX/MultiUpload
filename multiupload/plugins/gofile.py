@@ -26,7 +26,7 @@ async def gofile(e):
 			)
 		)
 	except Exception as e:
-		await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
+		await snd.edit(f"Downloading Failed\n\n<b>Error:</b> {e}")
 
 
 	await snd.edit('Success !!\n Path: '+file_path)
@@ -58,17 +58,17 @@ async def gofile(e):
 	hmm = f'''File Uploaded successfully !!
 Server: GoFile
 
-**~ File name** = __{filname}__
-**~ File size** = __{filesiz}__
-**~ Download Link**: __{dlurl}__'''
+<b>~ File name</b> = <i>{filname}</i>
+<b>~ File size</b> = <i>{filesiz}</i>
+<b>~ Download Link</b>: <i>{dlurl}</i>'''
 
 	await snd.edit(hmm)
-	os.remove('downloads/'+file_path)
 
 	## LOGGING TO A CHANNEL
 	xx = await e.get_chat()
-	reqmsg = f'''Req User: [{xx.first_name}](tg://user?id={xx.id})
+	reqmsg = f'''Req User: <a href="tg://user?id={xx.id}">{xx.first_name}</a>
 FileName: {filname}
 FileSize: {filesiz}
 #GOFILE'''
 	await anjana.send_message(LOG_CHANNEL, reqmsg)
+	os.remove('./downloads/'+file_path)

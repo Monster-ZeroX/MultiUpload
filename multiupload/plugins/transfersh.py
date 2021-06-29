@@ -44,7 +44,7 @@ async def tsh(event):
             )
         )
     except Exception as e:
-        await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
+        await snd.edit(f"Downloading Failed\n\n<b>Error:</b> {e}")
 
     try:
         await snd.edit("Uploading to TransferSh...")
@@ -55,21 +55,20 @@ async def tsh(event):
         hmm = f'''File Uploaded successfully !!
 Server: TransferSH
 
-**~ File name** = __{url.file.name}__
-**~ File size** = __{kl}__
-**~ Download Link**: __{download_link}__'''
+<b>~ File name</b> = <i>{url.file.name}</i>
+<b>~ File size</b> = <i>{kl}</i>
+<b>~ Download Link</b>: <i>{download_link}</i>'''
         await snd.edit(hmm)
     except Exception as e:
-        await snd.edit(f"Uploading Failed\n\n**Error:** {e}")
-
-    os.remove('downloads/'+file_path)
+        await snd.edit(f"Uploading Failed\n\n<b>Error:</b> {e}")
 
     raise events.StopPropagation
 
     ## LOGGING TO A CHANNEL
     xx = await e.get_chat()
-    reqmsg = f'''Req User: [{xx.first_name}](tg://user?id={xx.id})
+    reqmsg = f'''Req User: <a href="tg://user?id={xx.id}">{xx.first_name}</a>
 FileName: {url.file.name}
 FileSize: {kl}
 #TRANSFERSH'''
     await anjana.send_message(LOG_CHANNEL, reqmsg)
+    os.remove('./downloads/'+file_path)
