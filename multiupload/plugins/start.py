@@ -20,4 +20,4 @@ async def help(e):
 <b>/gofile</b> - Upload files to GoFile
 
 <i><b>Project of <a href="https://telegram.me/harp_tech">HARP Tech</a></b></i>'''
-  await anjana.send_message(e.chat_id, helpmsg, disable_web_page_preview=True)
+  await anjana.send_message(e.chat_id, helpmsg)
