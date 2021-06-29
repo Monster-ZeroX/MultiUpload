@@ -3,6 +3,7 @@ from multiupload import anjana
 from telethon.sync import events
 from datetime import datetime as dt
 import time
+from multiupload.utils import humanbytes, progress
 
 @anjana.on(events.NewMessage(pattern='/anonfile'))
 async def anonfile(e):
@@ -13,28 +14,22 @@ async def anonfile(e):
 	k = time.time()
 	snd = await anjana.send_message(e.chat_id, 'Start Downloading')
 
-	file_name = await e.client.download_media(
-		amjana,
-		pamka,
-		progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
-			progress(
-				pamka,
-				t,
-				snd,
-				k,
-				"Downloading...",
-			),
-		),
-	)
+	try:
+		file_path = await amjana.download_media(
+			progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
+				progress(pamka, t, snd, k, "Downloading...")
+			)
+		)
+	except Exception as e:
+		await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
 	t = time_formatter(((e - s).seconds) * 1000)
 
-	path = pamka+noize
-	await snd.edit('Success !!\n Path: '+path)
+	await snd.edit('Success !!\n Path: '+file_path)
 	await asyncio.sleep(3)
 
 	await snd.edit('Now uploading to AnonFile')
 	try:
-		anonul = await asyncio.create_subprocess_shell("curl -F 'file=@"+path+"' https://api.anonfiles.com/upload", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+		anonul = await asyncio.create_subprocess_shell("curl -F 'file=@"+file_path+"' https://api.anonfiles.com/upload", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 		stdout, strderr = await anonul.communicate()
 		kek = json.loads(stdout)
 	except Exception as err:
