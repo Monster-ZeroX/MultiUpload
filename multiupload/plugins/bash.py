@@ -11,7 +11,7 @@ async def bash(e):
 		print(xx.first_name + " trying to excute a cmd")
 		return await anjana.send_message(e.chat_id, "You are not a Developer")
 
-	cmd = await event.get_reply_message()
+	cmd = await e.get_reply_message()
 	shell = await asyncio.create_subprocess_shell(f"{cmd}", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 	stdout, strderr = await shell.communicate()
 
