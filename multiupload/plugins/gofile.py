@@ -4,6 +4,7 @@ from telethon.sync import events
 from datetime import datetime
 import time
 from multiupload.utils import humanbytes, progress, time_formatter, download_file
+from config import LOG_CHANNEL
 
 @anjana.on(events.NewMessage(pattern='/gofile'))
 async def gofile(e):
