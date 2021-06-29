@@ -14,18 +14,18 @@ async def anonfile(e):
 	snd = await anjana.send_message(e.chat_id, 'Start Downloading')
 
 	file_name = await e.client.download_media(
-                amjana,
-                pamka,
-                progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
-                    progress(
-                        pamka,
-                        t,
-                        snd,
-                        k,
-                        "Downloading...",
-                    ),
-                ),
-            )
+		amjana,
+		pamka,
+		progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
+			progress(
+				pamka,
+				t,
+				snd,
+				k,
+				"Downloading...",
+			),
+		),
+	)
 	t = time_formatter(((e - s).seconds) * 1000)
 
 	path = pamka+noize
