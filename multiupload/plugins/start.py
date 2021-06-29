@@ -9,7 +9,7 @@ async def start(e):
   xx = await e.get_chat()
   welcome = f'''Hey <a href="tg://user?id={xx.id}">{xx.first_name}</a> 💛
 For More Help. Click <b>/help</b>'''
-  await e.respond(e.chat_id, welcome)
+  await anjana.send_message(e.chat_id, welcome)
 
 @anjana.on(events.NewMessage(pattern='/help'))
 async def help(e):
@@ -20,4 +20,4 @@ async def help(e):
 <b>/gofile</b> - Upload files to GoFile
 
 <i><b>Project of <a href="https://telegram.me/harp_tech">HARP Tech</a></b></i>'''
-  await e.respond(e.chat_id, helpmsg)
+  await anjana.send_message(e.chat_id, helpmsg)
