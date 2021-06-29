@@ -2,6 +2,7 @@ import asyncio, json, os
 from multiupload import anjana
 from telethon.sync import events
 from datetime import datetime as dt
+import time
 
 @anjana.on(events.NewMessage(pattern='/anonfile'))
 async def anonfile(e):
