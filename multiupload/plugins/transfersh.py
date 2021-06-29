@@ -63,7 +63,7 @@ Server: TransferSH
         await snd.edit(f"Uploading Failed\n\n<b>Error:</b> {e}")
 
     ## LOGGING TO A CHANNEL
-    xx = await e.get_chat()
+    xx = await event.get_chat()
     reqmsg = f'''Req User: <a href="tg://user?id={xx.id}">{xx.first_name}</a>
 FileName: {url.file.name}
 FileSize: {kl}
