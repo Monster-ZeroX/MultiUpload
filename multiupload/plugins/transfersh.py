@@ -73,4 +73,3 @@ FileName: {url.file.name}
 FileSize: {kl}
 #TRANSFERSH'''
     await anjana.send_message(LOG_CHANNEL, reqmsg)
-
