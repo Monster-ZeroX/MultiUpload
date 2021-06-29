@@ -3,7 +3,7 @@ from multiupload import anjana
 from telethon.sync import events
 from datetime import datetime as dt
 import time
-from multiupload.utils import humanbytes, progress
+from multiupload.utils import humanbytes, progress, time_formatter
 
 @anjana.on(events.NewMessage(pattern='/anonfile'))
 async def anonfile(e):
