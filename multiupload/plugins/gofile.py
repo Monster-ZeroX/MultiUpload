@@ -23,7 +23,7 @@ async def gofile(e):
 	try:
 		file_path = await amjana.download_media(
 			progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
-				progress(pamka, t, snd, k)
+				progress(pamka, t, snd, k, "")
 			)
 		)
 	except Exception as e:
