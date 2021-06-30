@@ -2,7 +2,7 @@ import math
 import time, aiohttp
 
 
-async def progress(current, total, event, start, type_of_ps):
+async def progress(current, total, event, start, progress_str):
     """Generic progress_callback for both
     upload.py and download.py"""
     now = time.time()
@@ -23,7 +23,7 @@ async def progress(current, total, event, start, type_of_ps):
         tmp = progress_str + "➲ Size: {0} of {1}\n➲ ETA: {2}".format(
             humanbytes(current), humanbytes(total), time_formatter(estimated_total_time)
         )
-        await event.edit("{}\n {}".format(type_of_ps, tmp))
+        await event.edit("{}\n {}".format(progress_str, tmp))
 
 
 def convert_from_bytes(size):
