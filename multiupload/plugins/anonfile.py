@@ -27,7 +27,7 @@ async def anonfile(e):
 			)
 		)
 	except Exception as e:
-		await snd.edit(f"Downloading Failed\n\n<b>Error:</b> {e}")
+		await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
 
 
 	await snd.edit('Success !!\n Path: '+file_path)
@@ -50,9 +50,9 @@ async def anonfile(e):
 	hmm = f'''File Uploaded successfully !!
 Server: AnonFile
 
-<b>~ File name</b> = <i>{filname}</i>
-<b>~ File size</b> = <i>{filesiz}</i>
-<b>~ Download Link</b>: <i>{dlurl}</i>'''
+**~ File name** = __{filname}__
+**~ File size** = __{filesiz}__
+**~ Download Link**: __{dlurl}__'''
 	await snd.edit(hmm)
 
 	## LOGGING TO A CHANNEL

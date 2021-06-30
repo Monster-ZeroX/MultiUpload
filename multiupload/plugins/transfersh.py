@@ -44,7 +44,7 @@ async def tsh(event):
             )
         )
     except Exception as e:
-        await snd.edit(f"Downloading Failed\n\n<b>Error:</b> {e}")
+        await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
 
     try:
         await snd.edit("Uploading to TransferSh...")
@@ -55,12 +55,12 @@ async def tsh(event):
         hmm = f'''File Uploaded successfully !!
 Server: TransferSH
 
-<b>~ File name</b> = <i>{url.file.name}</i>
-<b>~ File size</b> = <i>{kl}</i>
-<b>~ Download Link</b>: <i>{download_link}</i>'''
+**~ File name** = __{url.file.name}__
+**~ File size** = __{kl}__
+**~ Download Link**: __{download_link}__'''
         await snd.edit(hmm)
     except Exception as e:
-        await snd.edit(f"Uploading Failed\n\n<b>Error:</b> {e}")
+        await snd.edit(f"Uploading Failed\n\n**Error:** {e}")
 
     ## LOGGING TO A CHANNEL
     xx = await event.get_chat()

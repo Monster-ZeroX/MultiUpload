@@ -23,11 +23,11 @@ async def gofile(e):
 	try:
 		file_path = await amjana.download_media(
 			progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
-				progress(pamka, t, snd, k, "Downloading...")
+				progress(pamka, t, snd, k)
 			)
 		)
 	except Exception as e:
-		await snd.edit(f"Downloading Failed\n\n<b>Error:</b> {e}")
+		await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
 
 
 	await snd.edit('Success !!\n Path: '+file_path)
@@ -59,9 +59,9 @@ async def gofile(e):
 	hmm = f'''File Uploaded successfully !!
 Server: GoFile
 
-<b>~ File name</b> = <i>{filname}</i>
-<b>~ File size</b> = <i>{filesiz}</i>
-<b>~ Download Link</b>: <i>{dlurl}</i>'''
+**~ File name** = __{filname}__
+**~ File size** = __{filesiz}__
+**~ Download Link**: __{dlurl}__'''
 
 	await snd.edit(hmm)
 

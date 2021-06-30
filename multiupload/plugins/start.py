@@ -2,23 +2,21 @@ from multiupload import anjana
 from telethon.sync import events
 from telethon.tl.functions.users import GetFullUserRequest
 
-anjana.parse_mode = 'html'
-
 @anjana.on(events.NewMessage(pattern='/start'))
 async def start(e):
   xx = await e.get_chat()
-  welcome = f'''Hey <a href="tg://user?id={xx.id}">{xx.first_name}</a> 💛
-For More Help. Click <b>/help</b>'''
+  welcome = f'''Hey [{xx.first_name}](tg://user?id={xx.id}) 💛
+For More Help. Click **/help**'''
   await anjana.send_message(e.chat_id, welcome)
 
 @anjana.on(events.NewMessage(pattern='/help'))
 async def help(e):
-  helpmsg = f'''<b><u>Here the help menu 😌</u></b>
+  helpmsg = f'''**--Here the help menu 😌--**
 
-<b>/anonfile</b> - Upload files to AnonFile.
-<b>/transfersh</b> - Upload files to TransferSH
-<b>/gofile</b> - Upload files to GoFile
-<b>/ufile</b> - Upload files to UFile
+**/anonfile** - Upload files to AnonFile.
+**/transfersh** - Upload files to TransferSH
+**/gofile** - Upload files to GoFile
+**/ufile** - Upload files to UFile
 
-<i><b>Project of <a href="https://telegram.me/harp_tech">HARP Tech</a></b></i>'''
+__**Project of [HARP Tech](https://telegram.me/harp_tech)**__'''
   await anjana.send_message(e.chat_id, helpmsg)

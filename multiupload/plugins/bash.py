@@ -24,7 +24,7 @@ async def bash(event):
     curruser = "AnjanaMa"
     uid = os.geteuid()
     if uid == 0:
-        cresult = f"<b>{curruser}:~# {cmd}</b>\n{result}"
+        cresult = f"**{curruser}:~# {cmd}**\n{result}"
     else:
-        cresult = f"<b>{curruser}:~$ {cmd}</b>\n{result}"
+        cresult = f"**{curruser}:~$ {cmd}**\n{result}"
     await catevent.edit(cresult)
