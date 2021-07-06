@@ -14,7 +14,7 @@
 
 *_Click below button to deploy heroku and fill requred vars. Nothing else._*
 
-### ✖️ Heroku Vars
+### 💫 Heroku Vars
  - APP_ID: Get it from [my.telegram.org](https://my.telegram.org).
  - API_HASH: Get it from [my.telegram.org](https://my.telegram.org).
  - BOT_TOKEN: Go to [@BotFather](https://telegram.me/botfather) and Create new bot. Insert that bot's bot token.
