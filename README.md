@@ -1,6 +1,6 @@
 # HARP MultiUpload V2.0 👀
 
-#### _A Bot to Upload files to Many Cloud services.☁️ Powered by Telethon_
+#### _A Bot to Upload files to Many Cloud services. Powered by Telethon_
 
 ## 🚩 Features
 - *Working on Requests*
