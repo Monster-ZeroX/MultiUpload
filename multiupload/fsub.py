@@ -1,4 +1,4 @@
-import asyncio
+import asyncio, random
 from telethon import events, Button
 from multiupload import anjana
 from telethon.tl.functions.channels import GetParticipantRequest as p
