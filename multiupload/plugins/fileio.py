@@ -6,8 +6,8 @@ from multiupload.fsub import *
 from multiupload.utils import downloader, humanbytes
 from config import LOG_CHANNEL
 
-@anjana.on(events.NewMessage(pattern='^/anonfile'))
-async def anonfile(event):
+@anjana.on(events.NewMessage(pattern='^/fileio'))
+async def fileio(event):
 	user_id = event.sender_id
 	if event.is_private and not await check_participant(user_id, '@harp_tech', event):
 		return
@@ -22,12 +22,16 @@ async def anonfile(event):
 	amjana = await event.get_reply_message()
 
 
+	## FILEIO LIMITATION CHECKING
+	if amjana.file.size > 1048576:
+		return await event.edit("Oof.. File size too Large. FileIO Limitation is 100MB")  
+
 	## LOGGING TO A CHANNEL
 	xx = await event.get_chat()
 	reqmsg = f'''Req User: [{xx.first_name}](tg://user?id={xx.id})
 FileName: {amjana.file.name}
 FileSize: {humanbytes(amjana.file.size)}
-#ANONFILE'''
+#FILEIO'''
 	await anjana.send_message(LOG_CHANNEL, reqmsg)
 
 	result = await downloader(
@@ -39,19 +43,19 @@ FileSize: {humanbytes(amjana.file.size)}
 	)
 
 	async with anjana.action(event.chat_id, 'document'):
-		await msg.edit("Now Uploading to Anonfile")
-		url = "https://api.anonfiles.com/upload"
+		await msg.edit("Now Uploading to FileIO")
+		url = f"https://file.io/"
 		r = post(url, files={'file': open(f'{result.name}','rb')})
 	await anjana.action(event.chat_id, 'cancel')
 
 	hmm = f'''File Uploaded successfully !!
-Server: AnonFile
+Server: FileIO
 
 **~ File name:** __{amjana.file.name}__
 **~ File size:** __{humanbytes(amjana.file.size)}__
-NOTE: Cant find notes. Its also anonymous 🤕'''
+NOTE: Once the download is complete, The file will be deleted from our servers.'''
 	await msg.edit(hmm, buttons=(
-		[Button.url('📦 Download', r.json()["data"]["file"]["url"]["short"])],
+		[Button.url('📦 Download', r.json()['link'])],
 		[Button.url('Support Chat 💭', 't.me/harp_chat')]
 		))
 

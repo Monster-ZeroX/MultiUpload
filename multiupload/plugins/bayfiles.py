@@ -6,14 +6,12 @@ from multiupload.fsub import *
 from multiupload.utils import downloader, humanbytes
 from config import LOG_CHANNEL
 
-@anjana.on(events.NewMessage(pattern='^/anonfile'))
-async def anonfile(event):
+@anjana.on(events.NewMessage(pattern='^/bayfiles'))
+async def bayfiles(event):
 	user_id = event.sender_id
 	if event.is_private and not await check_participant(user_id, '@harp_tech', event):
 		return
-	if event.reply_to_msg_id:
-		pass
-	else:
+	if not event.reply_to_msg_id:
 		return await event.edit("Please Reply to File")
 
 	async with anjana.action(event.chat_id, 'typing'):
@@ -27,7 +25,7 @@ async def anonfile(event):
 	reqmsg = f'''Req User: [{xx.first_name}](tg://user?id={xx.id})
 FileName: {amjana.file.name}
 FileSize: {humanbytes(amjana.file.size)}
-#ANONFILE'''
+#BAYFILES'''
 	await anjana.send_message(LOG_CHANNEL, reqmsg)
 
 	result = await downloader(
@@ -39,13 +37,13 @@ FileSize: {humanbytes(amjana.file.size)}
 	)
 
 	async with anjana.action(event.chat_id, 'document'):
-		await msg.edit("Now Uploading to Anonfile")
-		url = "https://api.anonfiles.com/upload"
+		await msg.edit("Now Uploading to Bayfiles")
+		url = "https://api.bayfiles.com/upload"
 		r = post(url, files={'file': open(f'{result.name}','rb')})
 	await anjana.action(event.chat_id, 'cancel')
 
 	hmm = f'''File Uploaded successfully !!
-Server: AnonFile
+Server: BayFiles
 
 **~ File name:** __{amjana.file.name}__
 **~ File size:** __{humanbytes(amjana.file.size)}__

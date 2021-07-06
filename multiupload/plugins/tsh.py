@@ -6,8 +6,8 @@ from multiupload.fsub import *
 from multiupload.utils import downloader, humanbytes
 from config import LOG_CHANNEL
 
-@anjana.on(events.NewMessage(pattern='^/anonfile'))
-async def anonfile(event):
+@anjana.on(events.NewMessage(pattern='^/tsh'))
+async def transfer(event):
 	user_id = event.sender_id
 	if event.is_private and not await check_participant(user_id, '@harp_tech', event):
 		return
@@ -27,7 +27,7 @@ async def anonfile(event):
 	reqmsg = f'''Req User: [{xx.first_name}](tg://user?id={xx.id})
 FileName: {amjana.file.name}
 FileSize: {humanbytes(amjana.file.size)}
-#ANONFILE'''
+#TRANSFERSH'''
 	await anjana.send_message(LOG_CHANNEL, reqmsg)
 
 	result = await downloader(
@@ -39,19 +39,19 @@ FileSize: {humanbytes(amjana.file.size)}
 	)
 
 	async with anjana.action(event.chat_id, 'document'):
-		await msg.edit("Now Uploading to Anonfile")
-		url = "https://api.anonfiles.com/upload"
+		await msg.edit("Now Uploading to TransferSH")
+		url = f"https://transfer.sh/"
 		r = post(url, files={'file': open(f'{result.name}','rb')})
 	await anjana.action(event.chat_id, 'cancel')
 
 	hmm = f'''File Uploaded successfully !!
-Server: AnonFile
+Server: TransferSH
 
 **~ File name:** __{amjana.file.name}__
 **~ File size:** __{humanbytes(amjana.file.size)}__
-NOTE: Cant find notes. Its also anonymous 🤕'''
+NOTE: Files will be deleted after 14 days.'''
 	await msg.edit(hmm, buttons=(
-		[Button.url('📦 Download', r.json()["data"]["file"]["url"]["short"])],
+		[Button.url('📦 Download', r.text)],
 		[Button.url('Support Chat 💭', 't.me/harp_chat')]
 		))
 

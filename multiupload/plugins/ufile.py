@@ -1,95 +1,71 @@
-import asyncio, json, os
+import asyncio, os, requests, time
+from requests import post
 from multiupload import anjana
-from telethon.sync import events
-from datetime import datetime
-import time
-from multiupload.utils import humanbytes, progress, time_formatter, download_file
+from telethon.sync import events, Button
+from multiupload.fsub import *
+from multiupload.utils import downloader, humanbytes
 from config import LOG_CHANNEL
 
-@anjana.on(events.NewMessage(pattern='/ufile'))
-async def ufile(e):
-	if e.reply_to_msg_id:
+@anjana.on(events.NewMessage(pattern='^/ufile'))
+async def ufile(event):
+	user_id = event.sender_id
+	if event.is_private and not await check_participant(user_id, '@harp_tech', event):
+		return
+	if event.reply_to_msg_id:
 		pass
 	else:
-		return await anjana.send_message(e.chat_id, "Please Reply to File")
+		return await event.edit("Please Reply to File")
 
-	amjana = await e.get_reply_message()
-	pamka = "./downloads/"
-	noize = amjana.file.name
-	k = time.time()
-	snd = await anjana.send_message(e.chat_id, 'Start Downloading')
+	async with anjana.action(event.chat_id, 'typing'):
+		await asyncio.sleep(2)
+	msg = await event.reply("**Processing...**")
+	amjana = await event.get_reply_message()
 
 
-	try:
-		file_path = await amjana.download_media(
-			progress_callback=lambda pamka, t: asyncio.get_event_loop().create_task(
-				progress(pamka, t, snd, k, "Downloading...")
+	## LOGGING TO A CHANNEL
+	xx = await event.get_chat()
+	reqmsg = f'''Req User: [{xx.first_name}](tg://user?id={xx.id})
+FileName: {amjana.file.name}
+FileSize: {humanbytes(amjana.file.size)}
+#UFILE'''
+	await anjana.send_message(LOG_CHANNEL, reqmsg)
+
+	result = await downloader(
+		f"downloads/{amjana.file.name}",
+		amjana.media.document,
+		msg,
+		time.time(),
+		f"**🏷 Downloading...**\n➲ **File Name:** {amjana.file.name}",
+	)
+
+	async with anjana.action(event.chat_id, 'document'):
+		await msg.edit("Now Uploading to UFile")
+		r = post('https://up.ufile.io/v1/upload/create_session',
+			data={'file_size': amjana.file.size})
+
+		r2 = post('https://up.ufile.io/v1/upload/chunk',
+			data={'chunk_index': 1, 'fuid': r.json()["fuid"]},
+			files={'file': open(f'{result.name}','rb')}
 			)
-		)
-	except Exception as e:
-		await snd.edit(f"Downloading Failed\n\n**Error:** {e}")
 
+		url = "https://up.ufile.io/v1/upload/finalise"
+		r3 = post(url, data={
+			'fuid': r.json()["fuid"],
+			'file_name': result.name,
+			'file_type': result.name.split(".")[-1],
+			'total_chunks': 1
+			})
+	await anjana.action(event.chat_id, 'cancel')
 
-	await snd.edit('Success !!\n Path: '+file_path)
-	await asyncio.sleep(2)
-
-	await snd.edit('Creating Session')
-	await asyncio.sleep(1)
-	try:
-		anonul = await asyncio.create_subprocess_shell(f"""curl 'https://up.ufile.io/v1/upload/create_session' \
-  -d 'file_size={os.path.getsize(file_path)}'""", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-		stdout, strderr = await anonul.communicate()
-		kek = json.loads(stdout)
-	except Exception as err:
-		return await snd.edit(f"ERR: {err}")
-	fuid = kek["fuid"]
-
-
-	await snd.edit('Creating Chunk')
-	await asyncio.sleep(1)
-	try:
-		anonul = await asyncio.create_subprocess_shell(f"""curl 'https://up.ufile.io/v1/upload/chunk' \
-  -F 'chunk_index=1' \
-  -F 'fuid={fuid}' \
-  -F 'file=@{file_path}'""", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-		stdout, strderr = await anonul.communicate()
-		kek = json.loads(stdout)
-	except Exception as err:
-		return await snd.edit(f"ERR: {err}")
-
-	root, extension = os.path.splitext(file_path)
-
-
-	await snd.edit('Uploading to UFile')
-	await asyncio.sleep(1)
-	try:
-		anonul = await asyncio.create_subprocess_shell(f"""curl 'https://up.ufile.io/v1/upload/finalise' \
-  -d 'fuid={fuid}' \
-  -d 'file_name={root}' \
-  -d 'file_type={extension.replace(".", "")}' \
-  -d 'total_chunks=1'""", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-		stdout, strderr = await anonul.communicate()
-		kek = json.loads(stdout)
-	except Exception as err:
-		return await snd.edit(f"ERR: {err}")
-
-
-	dlurl = kek["url"]
-	filesiz = kek["size"]
-	filname = file_path
 	hmm = f'''File Uploaded successfully !!
 Server: UFile
 
-**~ File name** = __{filname}__
-**~ File size** = __{filesiz}__
-**~ Download Link**: __{dlurl}__'''
-	await snd.edit(hmm)
+**~ File name:** __{amjana.file.name}__
+**~ File size:** __{humanbytes(amjana.file.size)}__
+NOTE: Bandwidth limit is 1MB/s. After a month files will be deleted.'''
+	await msg.edit(hmm, buttons=(
+		[Button.url('📦 Download', r3.json()['url'])],
+		[Button.url('Support Chat 💭', 't.me/harp_chat')]
+		))
 
-	## LOGGING TO A CHANNEL
-	xx = await e.get_chat()
-	reqmsg = f'''Req User: <a href="tg://user?id={xx.id}">{xx.first_name}</a>
-FileName: {filname}
-FileSize: {filesiz}
-#UFILE'''
-	await anjana.send_message(LOG_CHANNEL, reqmsg)
-	os.remove(file_path)
+	os.remove(result.name)
