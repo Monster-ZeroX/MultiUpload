@@ -2,6 +2,10 @@
 
 #### _A Bot to Upload files to Many Cloud services. Powered by Telethon_
 
+<p align="center">
+  <img src="https://telegra.ph/file/4e567b442c79d6379d198.jpg">
+</p>
+
 ## 🚩 Features
 - *Working on Requests*
 - *Fast Telethon*
